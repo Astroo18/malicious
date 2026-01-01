@@ -10,7 +10,7 @@
       "runs-on": ubuntu-latest,
       "steps": [
         {
-          "name": "Checkout code",
+          "name": "Checkout codee",
           "uses": "actions/checkout@v4"
         },
         {

@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""
+Código vulnerable para triggerear Plexalyzer
+Basado en: https://github.com/plexicus/simplest-vulnerable
+"""
+
+import os
+import subprocess
+import pickle
+import json
+
+# SQL Injection vulnerable
+def get_user_data(user_id):
+    import sqlite3
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    
+    # VULNERABLE: SQL Injection
+    query = f"SELECT * FROM users WHERE id = {user_id}"
+    cursor.execute(query)  # ¡Inyección SQL posible!
+    
+    return cursor.fetchall()
+
+# Command Injection vulnerable  
+def run_backup(source_dir):
+    # VULNERABLE: Command Injection
+    command = f"tar -czf backup.tar.gz {source_dir}"
+    os.system(command)  # ¡Inyección de comandos posible!
+
+# Deserialización insegura
+def load_config(config_data):
+    # VULNERABLE: Pickle deserialization
+    config = pickle.loads(config_data)  # ¡RCE posible!
+    return config
+
+# XSS en Flask (si es web)
+from flask import Flask, request
+app = Flask(__name__)
+
+@app.route('/search')
+def search():
+    query = request.args.get('q', '')
+    # VULNERABLE: XSS
+    return f"<h1>Resultados para: {query}</h1>"  # ¡XSS posible!
+
+# Path traversal
+def read_file(filename):
+    # VULNERABLE: Path Traversal
+    with open(filename, 'r') as f:
+        return f.read()
+
+if __name__ == "__main__":
+    print("Aplicación vulnerable lista para análisis")
+    # Aquí podrías agregar más vulnerabilidades...

